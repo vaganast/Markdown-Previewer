@@ -1,32 +1,55 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { marked } from 'marked'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [text, setText] = useState(`
+  # Welcome to my React Markdown Previewer!
+
+    # H1
+    ## H2
+    [title](https://www.example.com)
+    \`code\`
+    \`\`\`
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "age": 25
+    }
+    \`\`\`
+
+    - First item
+    - Second item
+    - Third item
+
+    > blockquote
+
+    ![alt text](image.jpg)
+
+    **bold text**
+
+  `)
+
+  marked.setOptions({
+    breaks: true
+  })
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h3>Editor</h3>
+      <textarea 
+        className='textarea'
+        id='editor' 
+        onChange={(e) => {setText(e.target.value)}}
+        value={text}
+      ></textarea>
+      <h3>Previewer</h3>
+      <div 
+        className='preview'
+        id='preview'
+        dangerouslySetInnerHTML={{
+          __html: marked(text),
+        }}
+      ></div>
     </div>
   )
 }
